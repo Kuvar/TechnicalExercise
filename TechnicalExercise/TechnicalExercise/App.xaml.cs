@@ -1,28 +1,43 @@
-﻿using System;
+﻿using Prism;
+using Prism.Ioc;
+using Prism.Plugin.Popups;
+using System;
+using TechnicalExercise.Services;
+using TechnicalExercise.Services.Interfaces;
+using TechnicalExercise.ViewModel;
+using TechnicalExercise.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TechnicalExercise
 {
-    public partial class App : Application
+    public partial class App
     {
-        public App()
+        public App() : this(null)
+        {
+
+        }
+
+        public App(IPlatformInitializer initializer) : base(initializer) { }
+
+        protected override async void OnInitialized()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            await NavigationService.NavigateAsync($"{nameof(MainPage)}");
         }
 
-        protected override void OnStart()
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-        }
+            containerRegistry.RegisterPopupNavigationService();
+            containerRegistry.RegisterPopupDialogService();
+            containerRegistry.RegisterForNavigation<NavigationPage>();
 
-        protected override void OnSleep()
-        {
-        }
+            //ViewModel
+            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
 
-        protected override void OnResume()
-        {
+
+            //services
+            containerRegistry.RegisterSingleton<IDataStore, DataStore>();
         }
     }
 }

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:behavior="clr-namespace:TechnicalExercise.Behaviors"
+             xmlns:local="clr-namespace:TechnicalExercise"
+             x:Class="TechnicalExercise.Views.MainPage">
+    <ContentPage.Content>
+        <Grid>
+            <Grid RowDefinitions="80,*">
+                <StackLayout Orientation="Vertical" Padding="10">
+                    <local:ExtendedEntry
+                        CornerRadius="50"
+                        BorderErrorColor="Red"
+                        Placeholder="Search User"
+                        Text="{Binding SearchText.Value, Mode=TwoWay}" 
+                        ErrorText="{Binding SearchText.NotValidMessageError}" 
+                        IsBorderErrorVisible="{Binding SearchText.IsNotValid, Mode=TwoWay}">
+                        <local:ExtendedEntry.Behaviors>
+                            <behavior:EmptyEntryValidatorBehavior />
+                            <behavior:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchTextChanged}"/>
+                        </local:ExtendedEntry.Behaviors>
+                    </local:ExtendedEntry>
+                    <Label Text="{Binding NotValidMessageError}" TextColor="Red" IsVisible="{Binding SearchText.IsNotValid}" />
+                </StackLayout>
+                
+                <CollectionView Grid.Row="1" ItemsSource="{Binding Users}" HorizontalScrollBarVisibility="Always" HorizontalOptions="FillAndExpand">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="5"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.Header>
+                        <Grid ColumnDefinitions="100,200,100,50,50" Padding="13,10">
+                            <Label Grid.Column="0" Text="Name" FontSize="Subtitle">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OrderByCommand}" CommandParameter="Name"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="1" Text="Email" FontSize="Subtitle">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OrderByCommand}" CommandParameter="Email"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="2" Text="Phone" FontSize="Subtitle">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OrderByCommand}" CommandParameter="Phone"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="3" Text="Age" FontSize="Subtitle">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OrderByCommand}" CommandParameter="Age"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="4" Text="Postal" FontSize="Subtitle">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OrderByCommand}" CommandParameter="Postal"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="5,0">
+                                <pancake:PancakeView BackgroundColor="#DCDCDC" CornerRadius="10" HorizontalOptions="FillAndExpand">
+                                    <Grid ColumnDefinitions="100,200,100,50,50" HeightRequest="50" Padding="10,0">
+                                        <Label Grid.Column="0" Text="{Binding Name}" VerticalOptions="CenterAndExpand"/>
+                                        <Label Grid.Column="1" Text="{Binding Email}" VerticalOptions="CenterAndExpand"/>
+                                        <Label Grid.Column="2" Text="{Binding Phone}" VerticalOptions="CenterAndExpand"/>
+                                        <Label Grid.Column="3" Text="{Binding Age}" VerticalOptions="CenterAndExpand"/>
+                                        <Label Grid.Column="4" Text="{Binding Postal}" VerticalOptions="CenterAndExpand"/>
+                                    </Grid>
+                                </pancake:PancakeView>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
